@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+name: <span id="spanName"></span>
+<input type="text" id="inputName">
+    
+</body>
+<script>
+    let Obj={
+        name:{
+            a:{
+                b:'1'
+            }
+        }
+    }
+    // let newObj = JSON.parse(JSON.stringify(Obj));
+    // Object.defineProperty(Obj, 'name', {
+    //     get() {
+    //         return newObj.name;
+    //     },
+    //     set(val) {
+    //         newObj.name = val;
+    //         observe();
+    //     }
+    // });
+
+    Obj = new Proxy(Obj, {
+        get(target, props) {
+            return target[props];
+        },
+        set(target, props, val) {
+            target[props] = val;
+            observe(); 
+        }
+    })
+
+    function observe() {
+        console.log('spanName', spanName)
+        spanName.innerHTML = Obj.name;
+        inputName.value = Obj.name;
+    }
+
+    // observe();
+
+    inputName.oninput = function (){
+        Obj.name = this.value;
+    }
+    // setTimeout(()=>{
+    //     Obj.name='西名字'
+    // },1000)
+</script>
+</html>   
